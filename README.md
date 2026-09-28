@@ -4,11 +4,13 @@ A Flutter movie browsing app built on the TMDB API, with Firebase authentication
 and four persistent, per-user movie lists (Favorites, Watched, Watching, Want to Watch).
 
 ## Project Overview
+
 Users can register/login, browse Popular / Top Rated / Now Playing movies from
 TMDB, search for any movie, view full details, and organize movies into four
 personal lists that persist locally between app restarts.
 
 ## Features
+
 - Email/password registration, login, logout (Firebase Authentication)
 - Browse movies by category (Popular, Top Rated, Now Playing) on the Home screen
 - Debounced live search (waits 500ms after typing stops before calling the API)
@@ -18,15 +20,18 @@ personal lists that persist locally between app restarts.
 - Loading, error, and empty states handled on every screen
 
 ## Technologies
+
 - Flutter & Dart
 - `provider` — state management
 - `http` — TMDB REST API calls
-- `sqflite` — local database for the four movie lists
+- sqflite & sqflite_common_ffi_web — local database for the four movie lists (with Web support).
 - `firebase_auth` / `firebase_core` — authentication
 - `cached_network_image` — poster/backdrop image loading & caching
 
 ## Architecture
+
 A simple layered architecture:
+
 - `models/` — plain Dart classes for API and database data (`Movie`, `MovieListItem`)
 - `services/` — all external I/O: `TmdbService` (network), `DBHelper` (SQLite), `AuthService` (Firebase)
 - `providers/` — app state exposed to the UI via `ChangeNotifier` (`AuthProvider`, `MovieProvider`, `ListProvider`)
@@ -38,7 +43,9 @@ imports `http`, `sqflite`, or `firebase_auth` directly** — it always goes
 through a provider, which goes through a service.
 
 ## State Management
+
 `provider` is used with `ChangeNotifier`:
+
 - `AuthProvider` — current Firebase user, login/register/logout, auth-related errors
 - `MovieProvider` — Home screen sections and search results, each wrapped in a
   `MovieSection` (movies + isLoading + error) reused across all lists
@@ -46,6 +53,7 @@ through a provider, which goes through a service.
   `ChangeNotifierProxyProvider` whenever the logged-in user changes
 
 ## API (TMDB)
+
 `TmdbService` wraps every TMDB endpoint used (`/movie/popular`, `/movie/top_rated`,
 `/movie/now_playing`, `/movie/{id}`, `/search/movie`). Responses are parsed into
 `Movie.fromJson` immediately — no raw JSON is passed to the UI. Network failures,
@@ -57,12 +65,14 @@ is loaded from a local `.env` file via `flutter_dotenv` — it's never hardcoded
 and never committed to GitHub (`.env` is in `.gitignore`).
 
 ## Authentication
+
 `AuthService` wraps `firebase_auth` for register/login/logout and maps Firebase
 error codes (e.g. `wrong-password`, `email-already-in-use`) to readable messages.
 `AuthProvider` exposes `AuthStatus` (unknown/authenticated/unauthenticated) which
 `SplashScreen` uses to route to `HomeScreen` or `LoginScreen`.
 
 ## Database
+
 SQFLite, **one table** (`movie_list_items`) for all four lists — a `listType`
 column (`favorite` / `watched` / `watching` / `wantToWatch`) distinguishes them,
 and a `userId` column scopes rows to the logged-in user. This avoids duplicating
@@ -72,6 +82,7 @@ query by list+user (view a list), query by movie+list+user (check current status
 for the Details screen toggle buttons).
 
 ## Project Structure
+
 ```
 lib/
   models/        Movie, MovieListItem + ListType enum
@@ -83,17 +94,21 @@ lib/
 ```
 
 ## Setup Instructions
+
 1. Install Flutter SDK and run `flutter pub get` in the project root.
 2. Create a Firebase project, enable **Email/Password** sign-in under Authentication.
 3. Run `flutterfire configure` (or add `google-services.json` / `GoogleService-Info.plist` manually) to connect Firebase to this app.
 4. Get a TMDB API key from https://www.themoviedb.org/settings/api.
-5. put tmdb api key in `.env` file.
-6. Run `flutter run`.
+5. 5. Create a .env file in the project root and add your key like this: TMDB_API_KEY=your_key_here (replace TMDB_API_KEY with whatever name you actually used in your code).
+6. If running on Web (Chrome), generate the required database files by running: dart run sqflite_common_ffi_web:setup
+7. Run flutter run (or flutter run -d chrome for web).
 
 ## Screenshots
-screenshots in seperated folder with name screenshot
+
+Screenshots are located in a separated folder named screenshots.
 
 ## Known Limitations
+
 - Only one poster/backdrop image size is used (no responsive image sizing).
 - Search does not support pagination (only the first page of results is shown).
 - No password-reset flow (only register/login/logout are implemented, as required).
