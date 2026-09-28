@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'firebase_options.dart';
 import 'package:movie_app/Providers/auth_provider.dart';
 import 'package:movie_app/Providers/movie_provider.dart';
 import 'package:movie_app/Providers/list_provider.dart';
 import 'package:movie_app/Screens/splash_screen.dart';
-
-Future<void> main() async {
+void main() async {  
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
