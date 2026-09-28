@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:dotenv/dotenv.dart' as dotenv;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:movie_app/Providers/auth_provider.dart';
 import 'package:movie_app/Providers/movie_provider.dart';
 import 'package:movie_app/Providers/list_provider.dart';
@@ -9,7 +9,7 @@ import 'package:movie_app/Screens/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  dotenv.DotEnv().load(['.env']);
+  await dotenv.load(fileName: '.env');
   await Firebase.initializeApp();
   runApp(const MyApp());
 }

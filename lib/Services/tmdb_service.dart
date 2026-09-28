@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:dotenv/dotenv.dart' as dotenv;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:movie_app/Models/movie.dart';
 
 class TmdbException implements Exception {
@@ -11,8 +11,7 @@ class TmdbException implements Exception {
 }
 
 class TmdbService {
-  static final dotenv.DotEnv _dotenv = dotenv.DotEnv()..load(['.env']);
-  static String get _apiKey => _dotenv['TMDB_API_KEY'] ?? '';
+  static String get _apiKey => dotenv.env['TMDB_API_KEY'] ?? '';
   static const String _baseUrl = 'https://api.themoviedb.org/3';
 
   void _checkKey() {
