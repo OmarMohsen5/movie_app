@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "739108795965",
+    "project_id": "flutter-iti-firebase",
+    "storage_bucket": "flutter-iti-firebase.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:739108795965:android:b14018da7c291acc81dc54",
+        "android_client_info": {
+          "package_name": "com.example.movie_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFCPspnDHJEDRoL7aL6E8j6V5HHstSXko"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:739108795965:android:93d11fdbee3d333181dc54",
+        "android_client_info": {
+          "package_name": "com.example.my_first_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFCPspnDHJEDRoL7aL6E8j6V5HHstSXko"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
