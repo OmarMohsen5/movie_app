@@ -9,7 +9,7 @@ import 'package:movie_app/Providers/list_provider.dart';
 import 'package:movie_app/Screens/splash_screen.dart';
 void main() async {  
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: '.env');
+  await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
