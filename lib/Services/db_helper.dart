@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:movie_app/Models/movie_list_item.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
 class DBHelper {
   DBHelper._internal();
@@ -8,7 +10,7 @@ class DBHelper {
 
   Database? _db;
 
-  Future<Database> get database async {
+  Future get database async {
     if (_db != null) {
       return _db!;
     }
@@ -17,23 +19,36 @@ class DBHelper {
   }
 
   Future<Database> _initDb() async {
+    if (kIsWeb) {
+      databaseFactory = databaseFactoryFfiWeb;
+      return databaseFactory.openDatabase(
+        'movie_app.db',
+        options: OpenDatabaseOptions(
+          version: 1,
+          onCreate: _onCreate,
+        ),
+      );
+    } 
+    
     final path = join(await getDatabasesPath(), 'movie_app.db');
     return openDatabase(
       path,
       version: 1,
-      onCreate: (db, version) {
-        return db.execute('''
-          CREATE TABLE movie_list_items (
-            movieId INTEGER NOT NULL,
-            title TEXT NOT NULL,
-            posterPath TEXT,
-            listType TEXT NOT NULL,
-            userId TEXT NOT NULL,
-            PRIMARY KEY (movieId, listType, userId)
-          )
-        ''');
-      },
+      onCreate: _onCreate,
     );
+  }
+
+  Future<void> _onCreate(Database db, int version) async {
+    return db.execute('''
+      CREATE TABLE movie_list_items (
+        movieId INTEGER NOT NULL,
+        title TEXT NOT NULL,
+        posterPath TEXT,
+        listType TEXT NOT NULL,
+        userId TEXT NOT NULL,
+        PRIMARY KEY (movieId, listType, userId)
+      )
+    ''');
   }
 
   Future<void> addToList(MovieListItem item) async {
@@ -71,6 +86,7 @@ class DBHelper {
       where: 'listType = ? AND userId = ?',
       whereArgs: [type.dbValue, userId],
     );
-    return rows.map((r) => MovieListItem.fromMap(r)).toList();
+    
+    return List.from(rows.map((r) => MovieListItem.fromMap(r)));
   }
 }

@@ -63,7 +63,8 @@ class _ListTab extends StatelessWidget {
           return const LoadingView();
         }
         if (snapshot.hasError) {
-          return ErrorView(message: 'Could not load this list.');
+          print('List Error for \(type:\){snapshot.error}'); 
+          return ErrorView(message: 'Error: ${snapshot.error}');
         }
         final items = snapshot.data ?? [];
         if (items.isEmpty) {
